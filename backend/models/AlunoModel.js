@@ -3,8 +3,19 @@ class Model {
     constructor() { }
 
     buscarAluno(id) {
-        const alunoAtual = alunos[id]
-        return alunoAtual
+        for (let i = 0; i < alunos.length; i++) {
+            const alunoAtual = alunos[i]
+            if (id == alunoAtual.id) {
+                return alunoAtual
+            }
+        }
+    }
+
+    buscarAlunos() {
+        for (let i = 0; i < alunos.length; i++) {
+            return alunos
+
+        }
     }
 }
 

@@ -4,7 +4,7 @@ const alunoModel = new Model();
 
 class Controller {
 
-    get = async (req, res) => {
+    show = async (req, res) => {
         try {
             const id = req.params.id
             const aluno = alunoModel.buscarAluno(id)
@@ -16,17 +16,19 @@ class Controller {
         }
     };
 
-    getAll = async (req, res) => {
+    index = async (req, res) => {
         try {
-            const id = req.params.id
-            res.status(200).send(id);
+
+            const aluno = alunoModel.buscarAlunos()
+            const alunoJson = JSON.stringify(aluno);
+            res.status(200).send(alunoJson);
         }
         catch (error) {
             res.status(500).send({ msg: e.message })
         }
     };
 
-    create = async (req, res) => {
+    store = async (req, res) => {
         try {
             const id = req.params.id
             res.status(200).send(id);
