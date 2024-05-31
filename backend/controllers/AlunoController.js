@@ -4,10 +4,10 @@ const alunoModel = new Model();
 
 class Controller {
 
-    show = async (req, res) => {
+    get = async (req, res) => {
         try {
-            const id = req.params.id
-            const aluno = alunoModel.buscarAluno(id)
+            const id = req.params.id;
+            const aluno = alunoModel.buscarAluno(id);
             const alunoJson = JSON.stringify(aluno);
             res.status(200).send(alunoJson);
         }
@@ -18,10 +18,9 @@ class Controller {
 
     index = async (req, res) => {
         try {
-
-            const aluno = alunoModel.buscarAlunos()
-            const alunoJson = JSON.stringify(aluno);
-            res.status(200).send(alunoJson);
+            const listaAlunos = alunoModel.buscarAlunos()
+            const alunosJson = JSON.stringify(listaAlunos);
+            res.status(200).send(alunosJson);
         }
         catch (error) {
             res.status(500).send({ msg: e.message })
@@ -31,7 +30,8 @@ class Controller {
     store = async (req, res) => {
         try {
             const id = req.params.id
-            res.status(200).send(id);
+            const aluno = alunoModel.criarAluno(id)
+            res.status(200).send(aluno);
         }
         catch (error) {
             res.status(500).send({ msg: e.message })
@@ -40,8 +40,10 @@ class Controller {
 
     update = async (req, res) => {
         try {
-            const id = req.params.id
-            res.status(200).send(id);
+            const id = req.params.id;
+            const aluno = alunoModel.atualizarAluno(id);
+            const alunoJson = JSON.stringify(aluno);
+            res.status(200).send(alunoJson);
         }
         catch (error) {
             res.status(500).send({ msg: e.message })
@@ -50,8 +52,10 @@ class Controller {
 
     delete = async (req, res) => {
         try {
-            const id = req.params.id
-            res.status(200).send(id);
+            const id = req.params.id;
+            const aluno = alunoModel.deletarAluno(id);
+            const alunoJson = JSON.stringify(aluno);
+            res.status(200).send(alunoJson);
         }
         catch (error) {
             res.status(500).send({ msg: e.message })
