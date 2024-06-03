@@ -23,28 +23,22 @@ class Model {
     }
 
     atualizarAluno(id) {
-        for (let i = 0; i < alunos.length; i++) {
-            const alunoAtual = alunos[i]
-            const novoAluno = {
+        for (let i = 1; i < alunos.length; i++) {
+            const alunoAtualizado = {
                 id: id,
                 nome: "Teste",
                 email: "Teste@gmail.com",
                 idade: 20
             }
-            if (id == alunoAtual.id) {
-                alunoAtual = novoAluno
-                return alunoAtual
+            if (id == alunoAtualizado.id) {
+                alunos[i] = alunoAtualizado
+                return alunoAtualizado
             }
         }
     }
 
     deletarAluno(id) {
-        for (let i = 0; i < alunos.length; i++) {
-            const alunoAtual = alunos[i]
-            if (id == alunoAtual.id) {
-                return alunos.splice(i, 1)
-            }
-        }
+        return alunos.filter(aluno => aluno.id != id);
     }
 }
 

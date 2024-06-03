@@ -5,8 +5,8 @@ import app from "@forkjs/group-router";
 app.group("/alunos/", function () {
 
     app.get('', alunoController.index)
-    app.post(':id', alunoController.store)
     app.get(':id', alunoController.get)
+    app.post(':id', alunoController.store)
     app.put(':id', alunoController.update)
     app.delete(':id', alunoController.delete)
 
