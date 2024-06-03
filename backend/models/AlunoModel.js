@@ -19,27 +19,24 @@ class Aluno {
                 return alunoAtual;
             }
         }
-        return "Nenhum aluno cadastrado com esse id.";
+        return false;
     }
 
     salvarAluno(id, nome, email, idade) {
         const novoAluno = new Aluno(id, nome, email, idade)
-        alunos.push(novoAluno)
+        alunos.push(novoAluno);
     }
 
     atualizarAluno(id, nome, email, idade) {
-        for (let i = 1; i < alunos.length; i++) {
-            const alunoAtualizado = {
-                id: id,
-                nome: nome,
-                email: email,
-                idade: idade
-            }
-            if (id == alunoAtualizado.id) {
-                alunos[i] = alunoAtualizado
-                return alunoAtualizado
+
+        for (let i = 0; i < alunos.length; i++) {
+            if (id == alunos[i].id) {
+                const alunoAtualizado = new Aluno(id, nome, email, idade)
+                alunos[i] = alunoAtualizado;
+                return alunoAtualizado;
             }
         }
+        return false;
     }
 
     deletarAluno(id) {

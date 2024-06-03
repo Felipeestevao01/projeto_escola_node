@@ -1,59 +1,62 @@
 import Aluno from "../models/AlunoModel.js";
+import express from "express";
+const app = express();
+app.use(express.json());
 const alunoModel = new Aluno();
 
 
-class Controller {
+class AlunoController {
 
 
-    index = async (req, res) => {
+    getAll = async (req, res) => {
         try {
-            const listaAlunos = alunoModel.buscarAlunos()
-            const alunosJson = JSON.stringify(listaAlunos);
-            res.status(200).send(alunosJson);
+            const listaAlunos = JSON.stringify(alunoModel.buscarAlunos());
+            res.set("Content-type", "application/json")
+            res.status(200).send(listaAlunos);
         }
         catch (error) {
-            res.status(500).send({ msg: e.message })
+            res.status(500).send({ msg: error.message })
         }
     };
 
     get = async (req, res) => {
         try {
             const id = req.params.id;
-            const aluno = alunoModel.buscarAluno(id);
-            const alunoJson = JSON.stringify(aluno);
-            res.status(200).send(alunoJson);
-        }
-        catch (error) {
-            res.status(500).send({ msg: e.message })
-        }
-    };
-
-    store = async (req, res) => {
-        try {
-            const novoAluno = {
-                id: req.params.id,
-                nome: req.body.nome,
-                email: req.body.email,
-                idade: req.body.idade
-            }
-
-            const aluno = alunoModel.criarAluno(novoAluno)
+            const aluno = JSON.stringify(alunoModel.buscarAluno(id));
+            res.set("Content-type", "application/json")
             res.status(200).send(aluno);
         }
         catch (error) {
-            res.status(500).send({ msg: e.message })
+            res.status(500).send({ msg: error.message })
+        }
+    };
+
+    create = async (req, res) => {
+        try {
+            const id = req.body.id
+            const nome = req.body.nome
+            const email = req.body.email
+            const idade = req.body.idade
+            JSON.stringify(alunoModel.salvarAluno(id, nome, email, idade))
+            res.set("Content-type", "application/json")
+            res.status(200).send("Aluno cadastrado com sucesso!");
+        }
+        catch (error) {
+            res.status(500).send({ msg: error.message })
         }
     };
 
     update = async (req, res) => {
         try {
-            const id = req.params.id;
-            const aluno = alunoModel.atualizarAluno(id);
-            const alunoJson = JSON.stringify(aluno);
-            res.status(200).send(alunoJson);
+            const id = req.params.id
+            const nome = req.body.nome
+            const email = req.body.email
+            const idade = req.body.idade
+            JSON.stringify(alunoModel.atualizarAluno(id, nome, email, idade));
+            res.status(200).send("Aluno atualizado com sucesso!");
         }
         catch (error) {
-            res.status(500).send({ msg: e.message })
+            res.status(500).send({ msg: error.message })
         }
     };
 
@@ -70,4 +73,4 @@ class Controller {
     };
 }
 
-export default Controller;
+export default AlunoController;
