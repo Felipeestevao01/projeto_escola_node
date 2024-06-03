@@ -1,5 +1,5 @@
-import Model from "../models/AlunoModel.js";
-const alunoModel = new Model();
+import Aluno from "../models/AlunoModel.js";
+const alunoModel = new Aluno();
 
 
 class Controller {
@@ -30,8 +30,14 @@ class Controller {
 
     store = async (req, res) => {
         try {
-            const id = req.params.id
-            const aluno = alunoModel.criarAluno(id)
+            const novoAluno = {
+                id: req.params.id,
+                nome: req.body.nome,
+                email: req.body.email,
+                idade: req.body.idade
+            }
+
+            const aluno = alunoModel.criarAluno(novoAluno)
             res.status(200).send(aluno);
         }
         catch (error) {

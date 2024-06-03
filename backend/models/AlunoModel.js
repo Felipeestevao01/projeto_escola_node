@@ -1,34 +1,39 @@
 import alunos from '../../bd.js'
-class Model {
-    constructor() { }
+class Aluno {
+
+    constructor(id, nome, email, idade) {
+        this.id = id;
+        this.nome = nome;
+        this.email = email;
+        this.idade = idade;
+    }
+
+    buscarAlunos() {
+        return alunos
+    }
 
     buscarAluno(id) {
         for (let i = 0; i < alunos.length; i++) {
             const alunoAtual = alunos[i]
             if (id == alunoAtual.id) {
-                return alunoAtual
+                return alunoAtual;
             }
         }
+        return "Nenhum aluno cadastrado com esse id.";
     }
 
-    buscarAlunos() {
-        for (let i = 0; i < alunos.length; i++) {
-            return alunos
-        }
-    }
-
-    criarAluno(id) {
-        const novoAluno = { id: id, nome: "Michel", email: "michel@gmail.com", idade: 36 }
+    salvarAluno(id, nome, email, idade) {
+        const novoAluno = new Aluno(id, nome, email, idade)
         alunos.push(novoAluno)
     }
 
-    atualizarAluno(id) {
+    atualizarAluno(id, nome, email, idade) {
         for (let i = 1; i < alunos.length; i++) {
             const alunoAtualizado = {
                 id: id,
-                nome: "Teste",
-                email: "Teste@gmail.com",
-                idade: 20
+                nome: nome,
+                email: email,
+                idade: idade
             }
             if (id == alunoAtualizado.id) {
                 alunos[i] = alunoAtualizado
@@ -42,4 +47,4 @@ class Model {
     }
 }
 
-export default Model;
+export default Aluno;
