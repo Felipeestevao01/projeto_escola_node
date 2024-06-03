@@ -1,11 +1,11 @@
 import alunos from '../../bd.js'
-class Aluno {
+import Pessoa from './PessoaModel.js';
 
-    constructor(id, nome, email, idade) {
-        this.id = id;
-        this.nome = nome;
-        this.email = email;
-        this.idade = idade;
+class Aluno extends Pessoa {
+
+    constructor(id, nome, sobrenome, telefone, cpf, endereco, email, dataAniversario, numeroFaltas) {
+        super(id, nome, sobrenome, telefone, cpf, endereco, email, dataAniversario)
+        this.numeroFaltas = numeroFaltas;
     }
 
     buscarAlunos() {
@@ -22,16 +22,16 @@ class Aluno {
         return false;
     }
 
-    salvarAluno(id, nome, email, idade) {
-        const novoAluno = new Aluno(id, nome, email, idade)
+    salvarAluno(id, nome, sobrenome, telefone, cpf, endereco, email, dataAniversario, numeroFaltas) {
+        const novoAluno = new Aluno(id, nome, sobrenome, telefone, cpf, endereco, email, dataAniversario, numeroFaltas)
         alunos.push(novoAluno);
     }
 
-    atualizarAluno(id, nome, email, idade) {
+    atualizarAluno(id, nome, sobrenome, telefone, cpf, endereco, email, dataAniversario, numeroFaltas) {
 
         for (let i = 0; i < alunos.length; i++) {
             if (id == alunos[i].id) {
-                const alunoAtualizado = new Aluno(id, nome, email, idade)
+                const alunoAtualizado = new Aluno(id, nome, sobrenome, telefone, cpf, endereco, email, dataAniversario, numeroFaltas)
                 alunos[i] = alunoAtualizado;
                 return alunoAtualizado;
             }
