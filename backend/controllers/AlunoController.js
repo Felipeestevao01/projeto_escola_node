@@ -21,7 +21,7 @@ class AlunoController {
 
     get = async (req, res) => {
         try {
-            const id = req.params.id;
+            const id = parseInt(req.params.id);
             const aluno = JSON.stringify(alunoModel.buscarAluno(id));
             res.set("Content-type", "application/json")
             res.status(200).send(aluno);
@@ -53,7 +53,7 @@ class AlunoController {
 
     update = async (req, res) => {
         try {
-            const id = req.params.id
+            const id = parseInt(req.params.id)
             const nome = req.body.nome
             const sobrenome = req.body.sobrenome
             const telefone = req.body.telefone
@@ -71,9 +71,10 @@ class AlunoController {
 
     delete = async (req, res) => {
         try {
-            const id = req.params.id;
+            const id = parseInt(req.params.id);
             const aluno = alunoModel.deletarAluno(id);
             const alunoJson = JSON.stringify(aluno);
+            res.set("Content-type", "application/json")
             res.status(200).send(alunoJson);
         }
         catch (error) {

@@ -7,7 +7,7 @@ let alunos = [
         cpf: "111.111.111-11",
         endereco: "Av itaipava",
         email: "felipe@gmail.com",
-        dataAnivesario: "12/05/1990",
+        dataAnivesario: "12-05-1990",
         numeroFaltas: 3
     },
 
@@ -19,7 +19,7 @@ let alunos = [
         cpf: "222.222.222-22",
         endereco: "Av itaipava",
         email: "amanda@gmail.com",
-        dataAnivesario: "27/01/1996",
+        dataAnivesario: "27-01-1996",
         numeroFaltas: 1
     },
 
@@ -31,7 +31,7 @@ let alunos = [
         cpf: "333.333.333-33",
         endereco: "Rua Antônio brigido",
         email: "mauricio@gmail.com",
-        dataAnivesario: "12/05/1990",
+        dataAnivesario: "12-05-1990",
         numeroFaltas: 1
     },
 

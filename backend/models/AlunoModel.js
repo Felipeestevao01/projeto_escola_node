@@ -13,10 +13,9 @@ class Aluno extends Pessoa {
     }
 
     buscarAluno(id) {
-        for (let i = 0; i < alunos.length; i++) {
-            const alunoAtual = alunos[i]
-            if (id == alunoAtual.id) {
-                return alunoAtual;
+        for (let i = 0; i <= alunos.length; i++) {
+            if (id === alunos[i].id) {
+                return alunos[i];
             }
         }
         return false;
@@ -40,7 +39,12 @@ class Aluno extends Pessoa {
     }
 
     deletarAluno(id) {
-        return alunos.filter(aluno => aluno.id != id);
+        const index = alunos.findIndex(aluno => aluno.id === id);
+        if (index !== -1) {
+            alunos.splice(index, 1);
+            return true;
+        }
+        return false;
     }
 }
 

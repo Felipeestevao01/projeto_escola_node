@@ -1,19 +1,19 @@
 class Pessoa {
 
     constructor(id, nome, sobrenome, telefone, cpf, endereco, email, dataAniversario) {
-        this.Id = id;
-        this.Nome = nome;
-        this.Sobrenome = sobrenome;
-        this.Telefone = telefone;
-        this.Cpf = cpf;
-        this.Endereco = endereco;
-        this.Email = email;
-        this.DataAniversario = dataAniversario;
+        this.id = id;
+        this.nome = nome;
+        this.sobrenome = sobrenome;
+        this.telefone = telefone;
+        this.cpf = cpf;
+        this.endereco = endereco;
+        this.email = email;
+        this.dataAniversario = new Date(dataAniversario);
     }
 
     getIdade() {
         let hoje = new Date()
-        let idade = hoje.getFullYear() - this.DataAniversario.getFullYear()
+        let idade = hoje.getFullYear() - this.dataAniversario.getFullYear()
         return idade
     }
 }
