@@ -1,5 +1,6 @@
 import alunos from '../../bd.js'
 import Pessoa from './PessoaModel.js';
+import pool from '../config/db/database.js';
 
 class Aluno extends Pessoa {
 

@@ -12,10 +12,16 @@ class Pessoa {
     }
 
     getIdade() {
-        let hoje = new Date()
-        let idade = hoje.getFullYear() - this.dataAniversario.getFullYear()
-        return idade
+        const hoje = new Date();
+        const anoAtual = hoje.getFullYear();
+        const anoAniversario = this.dataAniversario.getFullYear();
+        let idade = anoAtual - anoAniversario;
+
+        return idade;
     }
+
+    
+
 }
 
 export default Pessoa

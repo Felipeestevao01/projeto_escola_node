@@ -7,7 +7,6 @@ const alunoModel = new Aluno();
 
 class AlunoController {
 
-
     getAll = async (req, res) => {
         try {
             const listaAlunos = JSON.stringify(alunoModel.buscarAlunos());
