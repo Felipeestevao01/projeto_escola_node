@@ -5,7 +5,7 @@ const credenciais = {
     host: 'localhost',
     database: 'projetoescola',
     password: '123456',
-    port: 5432  
+    port: 5432
 };
 
 class Conexao {
