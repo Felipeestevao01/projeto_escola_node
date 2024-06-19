@@ -1,16 +1,23 @@
 import express from 'express'
 const app = express()
-import Controller from './backend/controllers/AlunoController.js';
-const controller = new Controller()
-import createGroupRouter from './backend/routes/resources.js';
+import createGroupRouter from './resources.js';
+
+import AlunoController from './backend/aluno/controller/index.js';
+//import ProfessorController from './backend/aluno/ProfessorController.js';
+const alunoController = new AlunoController()
+//const professorController = new ProfessorController()
 
 app.use(express.json())
 app.use(express.urlencoded({
     extended: true
 }))
 
-const groupRouter = createGroupRouter('/alunos/', controller);
-app.use(groupRouter.router);
+const alunoGroupRouter = createGroupRouter('/alunos/', alunoController);
+//const professorGroupRouter = createGroupRouter('/professor/', professorController);
+
+
+app.use(alunoGroupRouter.router);
+//app.use(professorGroupRouter.router);
 
 app.listen(3000, () => {
     console.log('Escutando na porta 3000...')

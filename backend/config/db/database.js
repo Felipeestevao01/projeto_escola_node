@@ -1,4 +1,4 @@
-const { Pool } = require('pg');
+import Pool from 'pg';
 
 const credenciais = {
     user: 'postgres',
@@ -7,12 +7,11 @@ const credenciais = {
     password: '123456',
     port: 5432
 };
-
+    
 class Conexao {
     constructor() {
         this.pool = new Pool(credenciais);
     }
-
 }
 
 export default Conexao;
