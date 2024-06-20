@@ -1,5 +1,8 @@
 import alunos from '../../../bd.js';
+import Conexao from '../../config/db/database.js';
 import Pessoa from '../../pessoa/models/index.js';
+
+const conexao = new Conexao
 
 class Aluno extends Pessoa {
 
@@ -9,8 +12,11 @@ class Aluno extends Pessoa {
         this.idAluno = idAluno;
     }
 
-    buscarTodos() {
-        return alunos
+    async buscarTodos() {
+        const sql = 'SELECT * FROM aluno'
+
+        const result = await conexao.query(sql);
+        return result
     }
 
     buscar(id) {
