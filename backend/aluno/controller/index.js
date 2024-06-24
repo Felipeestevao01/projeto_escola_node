@@ -9,7 +9,7 @@ class Controller {
 
     getAll = async (req, res) => {
         try {
-            const alunosObj = alunoRepository.buscarTodos()
+            const alunosObj = await alunoRepository.buscarTodos()
             const listaAlunos = JSON.stringify(alunosObj);
             
             res.set("Content-type", "application/json")

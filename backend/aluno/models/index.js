@@ -1,4 +1,3 @@
-import alunos from '../../../bd.js';
 import Pessoa from '../../pessoa/models/index.js';
 
 class Aluno extends Pessoa {
