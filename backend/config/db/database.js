@@ -1,30 +1,22 @@
-import pg from 'pg';
-const conexao = new pg.Connection();
+import pg from 'pg'
+const { Pool } = pg
 
-const credenciais = {
-    user: 'postgres',
-    host: 'localhost',
-    database: 'projeto_escola',
-    password: '123456',
-    port: 5432
-};
+const pool = new Pool({
+  user: 'postgres',
+  host: 'localhost',
+  database: 'projeto_escola',
+  password: '123456',
+  port: 5432,
+})
 
 class Conexao {
     constructor() {
+        this.conexao = pool
     }
 
     async query(text, params) {
-        const client = await this.pool.connect();
-        try {
-            const query = await client.query(text, params);
-            return query;
-        } finally {
-            client.release();
-        }
-    }
-
-    async close() {
-        await this.pool.end();
+        const query = await this.conexao.query(text, params);
+        return query;
     }
 }
 

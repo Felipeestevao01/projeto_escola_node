@@ -1,8 +1,5 @@
 import alunos from '../../../bd.js';
-import Conexao from '../../config/db/database.js';
 import Pessoa from '../../pessoa/models/index.js';
-
-const conexao = new Conexao
 
 class Aluno extends Pessoa {
 
@@ -12,12 +9,7 @@ class Aluno extends Pessoa {
         this.idAluno = idAluno;
     }
 
-    async buscarTodos() {
-        const sql = 'SELECT * FROM aluno'
 
-        const result = await conexao.query(sql);
-        return result
-    }
 
     buscar(id) {
         for (let i = 0; i < alunos.length; i++) {
@@ -29,7 +21,7 @@ class Aluno extends Pessoa {
     }
 
     salvar(id, nome, sobrenome, telefone, cpf, endereco, email, dataAniversario, numeroFaltas) {
-        const novoAluno = new Pessoa(id, nome, sobrenome, telefone, cpf, endereco, email, dataAniversario, numeroFaltas)
+        const novoAluno = new Aluno(id, nome, sobrenome, telefone, cpf, endereco, email, dataAniversario, numeroFaltas)
         alunos.push(novoAluno);
     }
 
@@ -37,7 +29,7 @@ class Aluno extends Pessoa {
 
         for (let i = 0; i < alunos.length; i++) {
             if (id == alunos[i].id) {
-                const alunoAtualizado = new Pessoa(id, nome, sobrenome, telefone, cpf, endereco, email, dataAniversario, numeroFaltas)
+                const alunoAtualizado = new Aluno(id, nome, sobrenome, telefone, cpf, endereco, email, dataAniversario, numeroFaltas)
                 alunos[i] = alunoAtualizado;
                 return alunoAtualizado;
             }

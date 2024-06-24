@@ -1,15 +1,17 @@
-import Aluno from "../models/index.js";
+import AlunoRepository from "../repository/postgres/index.js"
 import express from "express";
 const app = express();
 app.use(express.json());
-const alunoModel = new Aluno();
+const alunoRepository = new AlunoRepository();
 
 
 class Controller {
 
     getAll = async (req, res) => {
         try {
-            const listaAlunos = JSON.stringify(alunoModel.buscarTodos());
+            const alunosObj = alunoRepository.buscarTodos()
+            const listaAlunos = JSON.stringify(alunosObj);
+            
             res.set("Content-type", "application/json")
             res.status(200).send(listaAlunos);
         }
@@ -21,7 +23,7 @@ class Controller {
     get = async (req, res) => {
         try {
             const id = parseInt(req.params.id);
-            const aluno = JSON.stringify(alunoModel.buscar(id));
+            const aluno = JSON.stringify(alunoRepository.buscar(id));
             res.set("Content-type", "application/json")
             res.status(200).send(aluno);
         }
@@ -41,7 +43,7 @@ class Controller {
             const email = req.body.email
             const dataAniversario = req.body.dataAniversario
             const numeroFaltas = req.body.numeroFaltas
-            JSON.stringify(alunoModel.salvar(id, nome, sobrenome, telefone, cpf, endereco, email, dataAniversario, numeroFaltas))
+            JSON.stringify(alunoRepository.salvar(id, nome, sobrenome, telefone, cpf, endereco, email, dataAniversario, numeroFaltas))
             res.set("Content-type", "application/json")
             res.status(200).send("Aluno cadastrado com sucesso!");
         }
@@ -60,7 +62,7 @@ class Controller {
             const endereco = req.body.endereco
             const email = req.body.email
             const idade = req.body.idade
-            JSON.stringify(alunoModel.atualizar(id, nome, sobrenome, telefone, cpf, endereco, email, idade));
+            JSON.stringify(alunoRepository.atualizar(id, nome, sobrenome, telefone, cpf, endereco, email, idade));
             res.status(200).send("Aluno atualizado com sucesso!");
         }
         catch (error) {
@@ -71,7 +73,7 @@ class Controller {
     delete = async (req, res) => {
         try {
             const id = parseInt(req.params.id);
-            const aluno = alunoModel.deletar(id);
+            const aluno = alunoRepository.deletar(id);
             const alunoJson = JSON.stringify(aluno);
             res.set("Content-type", "application/json")
             res.status(200).send(alunoJson);
