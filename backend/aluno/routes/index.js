@@ -1,5 +1,5 @@
-import AlunoController from '../controllers/AlunoController.js';
-const alunoController = new AlunoController();
+import Controller from '../controllers/index.js';
+const alunoController = new Controller();
 import app from "@forkjs/group-router";
 
 app.group("/alunos/", function () {

@@ -27,7 +27,7 @@ class Controller {
     get = async (req, res) => {
         try {
             const id = parseInt(req.params.id);
-            const alunoObj = await alunoRepository.buscar(id)
+            const alunoObj = await alunoRepository.buscar(id);
 
             if (!alunoObj) {
                 res.status(500).send({ msg: "Aluno não cadastrado." })
@@ -59,8 +59,8 @@ class Controller {
             if (!pessoaObj.id) {
                 res.status(500).send({ msg: "Erro ao cadastrar o aluno." })
             }
-            const numeroFaltas = req.body.numeroFaltas
-            await alunoRepository.salvar(numeroFaltas, pessoaObj.id)
+            
+            await alunoRepository.salvar(pessoaObj.id)
 
             res.set("Content-type", "application/json")
             res.status(200).send("Aluno cadastrado com sucesso!");

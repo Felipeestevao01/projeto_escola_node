@@ -2,7 +2,7 @@ import Pessoa from '../../pessoa/models/index.js';
 
 class Aluno extends Pessoa {
 
-    constructor(idPessoa, nome, sobrenome, telefone, cpf, endereco, email, dataAniversario, idAluno, numeroFaltas) {
+    constructor(idAluno, numeroFaltas, idPessoa, nome, sobrenome, telefone, cpf, endereco, email, dataAniversario) {
         super(idPessoa, nome, sobrenome, telefone, cpf, endereco, email, dataAniversario)
         this.numeroFaltas = numeroFaltas;
         this.idAluno = idAluno;
