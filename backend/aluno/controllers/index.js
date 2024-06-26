@@ -1,3 +1,4 @@
+import Validator from "../../../utilitarios/validator.js";
 import PessoaRepository from "../../pessoa/repository/postgres/index.js";
 import AlunoRepository from "../repository/postgres/index.js"
 import express from "express";
@@ -27,9 +28,14 @@ class Controller {
         try {
             const id = parseInt(req.params.id);
             const alunoObj = await alunoRepository.buscar(id)
-            const aluno = JSON.stringify(alunoObj);
-            res.set("Content-type", "application/json")
-            res.status(200).send(aluno);
+
+            if (!alunoObj) {
+                res.status(500).send({ msg: "Aluno não cadastrado." })
+            } else {
+                const aluno = JSON.stringify(alunoObj);
+                res.set("Content-type", "application/json")
+                res.status(200).send(aluno);
+            }
         }
         catch (error) {
             res.status(500).send({ msg: error.message });
@@ -38,21 +44,23 @@ class Controller {
 
     create = async (req, res) => {
         try {
-            const nome = req.body.nome
-            const sobrenome = req.body.sobrenome
-            const telefone = req.body.telefone
-            const cpf = req.body.cpf
-            const endereco = req.body.endereco
-            const email = req.body.email
-            const dataAniversario = req.body.dataAniversario
-            const pessoaObj = await pessoaRepository.salvar(nome, sobrenome, telefone, cpf, endereco, email, dataAniversario)
+
+            const regras = [
+                { field: 'nome', validations: ['required', 'min:3'] },
+                { field: 'sobrenome', validations: ['required', 'min:3'] },
+            ];
+            const validator = new Validator(req.body, regras);
+            if (!validator.validate()) {
+                return res.status(400).json({ errors: validator.getErrors() });
+            }
+
+            const pessoaObj = await pessoaRepository.salvar(req.body)
 
             if (!pessoaObj.id) {
-                res.status(500).send({ msg: "Erro ao cadastrar a pessoa." })
+                res.status(500).send({ msg: "Erro ao cadastrar o aluno." })
             }
             const numeroFaltas = req.body.numeroFaltas
             await alunoRepository.salvar(numeroFaltas, pessoaObj.id)
-
 
             res.set("Content-type", "application/json")
             res.status(200).send("Aluno cadastrado com sucesso!");
@@ -71,14 +79,7 @@ class Controller {
                 res.status(500).send({ msg: "Aluno não cadastrado." })
             }
             const idPessoa = alunoAtual.id_pessoa
-            const nome = req.body.nome
-            const sobrenome = req.body.sobrenome
-            const telefone = req.body.telefone
-            const cpf = req.body.cpf
-            const endereco = req.body.endereco
-            const email = req.body.email
-            const dataAniversario = req.body.data_aniversario
-            await pessoaRepository.atualizar(idPessoa, nome, sobrenome, telefone, cpf, endereco, email, dataAniversario);
+            await pessoaRepository.atualizar(idPessoa, req.body);
 
             const numeroFaltas = req.body.numeroFaltas
             await alunoRepository.atualizar(numeroFaltas, id)
@@ -93,13 +94,17 @@ class Controller {
     delete = async (req, res) => {
         try {
             const id = parseInt(req.params.id);
-            const aluno = alunoRepository.deletar(id);
-            const alunoJson = JSON.stringify(aluno);
-            res.set("Content-type", "application/json")
-            res.status(200).send(alunoJson);
+            const pessoaAtual = await alunoRepository.buscar(id)
+
+            if (pessoaAtual.dt_deleted != null) {
+                res.status(500).send({ msg: "Erro ao deletar o aluno." })
+            }
+
+            await alunoRepository.deletar(pessoaAtual.id_pessoa);
+            res.status(200).send({});
         }
         catch (error) {
-            res.status(500).send({ msg: e.message })
+            res.status(500).send({ msg: error.message })
         }
     };
 }

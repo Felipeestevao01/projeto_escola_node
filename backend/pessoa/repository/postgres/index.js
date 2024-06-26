@@ -16,7 +16,8 @@ class PessoaRepository {
         return result.rows[0];
     }
 
-    async salvar(nome, sobrenome, telefone, cpf, endereco, email, dataAniversario) {
+    async salvar(res) {
+        const { nome, sobrenome, telefone, cpf, endereco, email, dataAniversario } = res
 
         const sql = `INSERT INTO pessoa (
                         nome, 
@@ -52,8 +53,8 @@ class PessoaRepository {
         return result.rows[0];
     }
 
-    async atualizar(id, nome, sobrenome, telefone, cpf, endereco, email, dataAniversario) {
-
+    async atualizar(idPessoa, res) {
+        const { nome, sobrenome, telefone, cpf, endereco, email, dataAniversario } = res
         const sql = `UPDATE pessoa
                         SET
                     nome = $1,
@@ -75,7 +76,7 @@ class PessoaRepository {
             endereco,
             email,
             dataAniversario,
-            id
+            idPessoa
         ]
 
         const result = await this.client.conexao.query(sql, binds)

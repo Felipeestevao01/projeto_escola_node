@@ -7,29 +7,60 @@ class AlunoRepository {
     }
 
     async buscarTodos() {
-        const sql = `SELECT *
-                        FROM aluno
-                        LEFT JOIN pessoa 
-                        ON aluno.id_pessoa = pessoa.id
-                        WHERE pessoa.dt_deleted IS NULL;`
+        const sql = `SELECT 
+                        aluno.id AS aluno_id,
+                        aluno.numero_falta,
+                        aluno.id_pessoa,
+                        pessoa.nome,
+                        pessoa.sobrenome,
+                        pessoa.telefone,
+                        pessoa.cpf,
+                        pessoa.endereco,
+                        pessoa.email,
+                        pessoa.data_aniversario
+                    FROM aluno
+                    LEFT JOIN pessoa
+                    ON aluno.id_pessoa = pessoa.id
+                    WHERE pessoa.dt_deleted IS null
+                    ORDER BY aluno_id;`
 
         const result = await this.client.conexao.query(sql);
         const alunos = []
         result.rows.forEach(row => {
-            const novoAluno = new Aluno(row.id_pessoa, row.nome, row.sobrenome, row.telefone, row.cpf, row.endereco, row.email, row.data_aniversario, row.id, row.numero_falta)
+            const novoAluno = new Aluno(
+                                        row.aluno_id, 
+                                        row.nome, 
+                                        row.sobrenome, 
+                                        row.telefone, 
+                                        row.cpf, 
+                                        row.endereco, 
+                                        row.email, 
+                                        row.data_aniversario, 
+                                        row.id_pessoa, 
+                                        row.numero_falta
+                                    )
             alunos.push(novoAluno)
         });
         return alunos
     }
 
     async buscar(id) {
-        const sql = `SELECT *
-                        FROM aluno
-                        LEFT JOIN pessoa
-                        ON aluno.id_pessoa = pessoa.id
-                        WHERE aluno.id = $1
-                        AND pessoa.dt_deleted IS NULL;
-                        `;
+        const sql = `SELECT 
+                        aluno.id AS aluno_id,
+                        aluno.numero_falta,
+                        aluno.id_pessoa,
+                        pessoa.nome,
+                        pessoa.sobrenome,
+                        pessoa.telefone,
+                        pessoa.cpf,
+                        pessoa.endereco,
+                        pessoa.email,
+                        pessoa.data_aniversario
+                    FROM aluno
+                    LEFT JOIN pessoa
+                    ON aluno.id_pessoa = pessoa.id
+                    WHERE aluno.id = $1
+                    AND pessoa.dt_deleted IS NULL`
 
         const binds = [id]
         const result = await this.client.conexao.query(sql, binds);

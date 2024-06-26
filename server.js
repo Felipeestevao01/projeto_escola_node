@@ -2,7 +2,7 @@ import express from 'express'
 const app = express()
 import createGroupRouter from './resources.js';
 
-import AlunoController from './backend/aluno/controller/index.js';
+import AlunoController from './backend/aluno/controllers/index.js';
 //import ProfessorController from './backend/aluno/ProfessorController.js';
 const alunoController = new AlunoController()
 //const professorController = new ProfessorController()
