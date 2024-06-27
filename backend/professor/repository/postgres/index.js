@@ -6,7 +6,7 @@ class ProfessorRepository {
         this.client = new Conexao()
     }
 
-    buscarTodos = async () => {
+    async buscarTodos() {
         const sql = `SELECT 
                         professor.id AS professor_id,
                         professor.salario,
@@ -43,7 +43,7 @@ class ProfessorRepository {
         return professores
     }
 
-    buscar = async (id) => {
+    async buscar(id) {
         const sql = `SELECT 
                         professor.id AS professor_id,
                         professor.salario ,
@@ -65,7 +65,7 @@ class ProfessorRepository {
         return result.rows[0];
     }
 
-    salvar = async (salario, id) => {
+    async salvar(salario, id) {
         const sql = `INSERT INTO professor (
                         salario,
                         id_pessoa
@@ -96,6 +96,18 @@ class ProfessorRepository {
             salario,
             id
         ]
+
+        const result = await this.client.conexao.query(sql, binds)
+        return result.rows[0];
+    }
+
+    async deletar(id) {
+
+        const sql = `UPDATE pessoa SET
+                        dt_deleted = NOW()
+                    WHERE id = $1;`
+
+        const binds = [id]
 
         const result = await this.client.conexao.query(sql, binds)
         return result.rows[0];

@@ -6,7 +6,6 @@ app.use(express.json());
 const pessoaRepository = new PessoaRepository();
 const professorRepository = new ProfessorRepository();
 
-
 class Controller {
 
     getAll = async (req, res) => {
@@ -47,12 +46,13 @@ class Controller {
 
             if (!pessoaObj.id) {
                 res.status(500).send({ msg: "Erro ao cadastrar o professor." })
+            } else {
+                const salario = req.body.salario
+                const porfessorObj = await professorRepository.salvar(salario, pessoaObj.id)
+                res.set("Content-type", "application/json")
+                res.status(201).send({ msg: porfessorObj })
             }
 
-            const salario = req.body.salario
-            await professorRepository.salvar(salario, pessoaObj.id)
-            res.set("Content-type", "application/json")
-            res.status(200).send({ msg: "Professor cadastrado com sucesso!" })
         }
         catch (error) {
             res.status(500).send({ msg: error.message });
@@ -65,17 +65,18 @@ class Controller {
             const professorAtual = await professorRepository.buscar(id)
 
             if (!professorAtual) {
-                res.status(500).send({ msg: "Professor não cadastrado." })
+                res.status(500).send({ msg: "Professor não encontrado." })
+            } else {
+                const idPessoa = professorAtual.id_pessoa
+                await pessoaRepository.atualizar(idPessoa, req.body)
+
+                const salario = req.body.salario
+                await professorRepository.atualizar(salario, id)
+                res.set("Content-type", "application/json")
+                res.status(200).send({ msg: "Professor atualizado com sucesso!" })
             }
 
-            const idPessoa = professorAtual.id_pessoa
-            await pessoaRepository.atualizar(idPessoa, req.body)
 
-            const salario = req.body.salario
-            await professorRepository.atualizar(salario, id)
-
-            res.set("Content-type", "application/json")
-            res.status(200).send({ msg: "Professor atualizado com sucesso!" })
         }
         catch (error) {
             res.status(500).send({ msg: error.message });
@@ -84,6 +85,17 @@ class Controller {
 
     delete = async (req, res) => {
         try {
+            const id = parseInt(req.params.id)
+            const pessoaAtual = await professorRepository.buscar(id)
+
+            if (pessoaAtual.dt_deleted != null) {
+                res.status(500).send({ msg: "Professor não encontrado." })
+            } else {
+                await professorRepository.deletar(pessoaAtual.id_pessoa);
+
+                res.set("Content-type", "application/json")
+                res.status(200).send({})
+            }
 
         }
         catch (error) {

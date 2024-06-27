@@ -62,7 +62,7 @@ class AlunoRepository {
                     WHERE aluno.id = $1
                     AND pessoa.dt_deleted IS NULL;`
 
-        const binds = [idAluno]
+        const binds = [id]
         const result = await this.client.conexao.query(sql, binds);
         return result.rows[0];
     }
@@ -105,14 +105,14 @@ class AlunoRepository {
         return result.rows[0];
     }
 
-    async deletar(idPessoa) {
+    async deletar(id) {
 
         const sql = `UPDATE pessoa SET
                         dt_deleted = NOW()
                     WHERE id = $1;`
 
         const binds = [
-            idPessoa
+            id
         ]
 
         const result = await this.client.conexao.query(sql, binds)
