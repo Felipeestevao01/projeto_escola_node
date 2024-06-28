@@ -7,18 +7,15 @@ app.use(express.json());
 const alunoRepository = new AlunoRepository();
 const pessoaRepository = new PessoaRepository();
 
-
 class Controller {
-
 
     getAll = async (req, res) => {
         try {
             const alunosObj = await alunoRepository.buscarTodos();
-
             res.status(200).json(alunosObj);
         }
         catch (error) {
-            res.status(500).send({ msg: error.message });
+            res.status(500).json({ msg: error.message });
         }
     };
 
@@ -28,13 +25,13 @@ class Controller {
             const alunoObj = await alunoRepository.buscar(id);
 
             if (!alunoObj) {
-                res.status(422).send({ msg: "Aluno não cadastrado." })
+                res.status(422).json({ msg: "Aluno não cadastrado." })
             } else {
                 res.status(200).json(alunoObj);
             }
         }
         catch (error) {
-            res.status(500).send({ msg: error.message });
+            res.status(500).json({ msg: error.message });
         }
     };
 
@@ -53,17 +50,16 @@ class Controller {
             const pessoaObj = await pessoaRepository.salvar(req.body)
 
             if (!pessoaObj.id) {
-                res.status(500).send({ msg: "Erro ao cadastrar o aluno." })
+                res.status(422).json({ msg: "Erro ao cadastrar o aluno." })
             } else {
                 const numeroFalta = req.body.numeroFaltas
                 await alunoRepository.salvar(numeroFalta, pessoaObj.id)
 
-                res.set("Content-type", "application/json")
-                res.status(201).send("Aluno cadastrado com sucesso!");
+                res.status(201).json({ msg: "Aluno cadastrado com sucesso!" });
             }
         }
         catch (error) {
-            res.status(500).send({ msg: error.message })
+            res.status(500).json({ msg: error.message })
         }
     };
 
@@ -73,20 +69,19 @@ class Controller {
             const alunoAtual = await alunoRepository.buscar(id)
 
             if (!alunoAtual) {
-                res.status(422).send({ msg: "Aluno não cadastrado." })
+                res.status(422).json({ msg: "Aluno não cadastrado." })
             } else {
-                const idPessoa = alunoAtual.id_pessoa
+                const idPessoa = alunoAtual.id_pessoa;
                 await pessoaRepository.atualizar(idPessoa, req.body);
 
-                const numeroFaltas = req.body.numeroFaltas
-                await alunoRepository.atualizar(numeroFaltas, id)
+                const numeroFaltas = req.body.numeroFaltas;
+                await alunoRepository.atualizar(numeroFaltas, id);
 
-                res.set("Content-type", "application/json")
-                res.status(200).send("Aluno atualizado com sucesso!");
+                res.status(200).json({ msg: "Aluno atualizado com sucesso!" });
             }
         }
         catch (error) {
-            res.status(500).send({ msg: error.message })
+            res.status(500).json({ msg: error.message })
         }
     };
 
@@ -96,14 +91,14 @@ class Controller {
             const pessoaAtual = await alunoRepository.buscar(id)
 
             if (!pessoaAtual) {
-                res.status(500).send({ msg: "Erro ao deletar o aluno." })
+                res.status(422).json({ msg: "Erro ao deletar o aluno." })
             } else {
                 await alunoRepository.deletar(pessoaAtual.id_pessoa);
-                res.status(200).send({});
+                res.status(200).json({ msg: "Aluno deletado com sucesso!" });
             }
         }
         catch (error) {
-            res.status(500).send({ msg: error.message })
+            res.status(500).json({ msg: error.message })
         }
     };
 }
