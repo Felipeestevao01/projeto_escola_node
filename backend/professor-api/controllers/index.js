@@ -90,7 +90,7 @@ class Controller {
             const id = parseInt(req.params.id)
             const pessoaAtual = await professorRepository.buscar(id)
 
-            if (pessoaAtual.dt_deleted != null) {
+            if (!pessoaAtual) {
                 res.status(500).send({ msg: "Professor não encontrado." })
             } else {
                 await professorRepository.deletar(pessoaAtual.id_pessoa);

@@ -1,4 +1,4 @@
-import Pessoa from '../../pessoa/models/index.js';
+import Pessoa from '../../pessoa-api/models/index.js';
 
 class Aluno extends Pessoa {
 

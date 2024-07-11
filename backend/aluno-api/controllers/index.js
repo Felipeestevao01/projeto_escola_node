@@ -1,5 +1,5 @@
 import Validator from "../../../utilitarios/validator.js";
-import PessoaRepository from "../../pessoa/repository/postgres/index.js";
+import PessoaRepository from "../../pessoa-api/repository/postgres/index.js";
 import AlunoRepository from "../repository/postgres/index.js"
 import express from "express";
 const app = express();
