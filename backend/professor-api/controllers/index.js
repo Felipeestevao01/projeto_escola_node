@@ -1,4 +1,4 @@
-import PessoaRepository from "../../pessoa/repository/postgres/index.js";
+import PessoaRepository from "../../pessoa-api/repository/postgres/index.js";
 import ProfessorRepository from "../repository/postgres/index.js";
 import Validator from "../../../utilitarios/validator.js";
 import express from "express";
@@ -13,8 +13,7 @@ class Controller {
         try {
             const professoresObj = await professorRepository.buscarTodos()
             res.status(200).json(professoresObj);
-        }
-        catch (error) {
+        } catch (error) {
             res.status(500).json({ msg: error.message });
         }
     }
