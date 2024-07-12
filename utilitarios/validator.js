@@ -5,20 +5,34 @@ class Validator {
         this.errors = {};
     }
 
-    validate() {
+    async validate() {
         for (let rule of this.rules) {
             const { field, validations } = rule;
             const value = this.req[field];
 
             for (let validation of validations) {
-                const [method, ...args] = validation.split(':');
-                if (!this[method](value, ...args)) {
-                    this.addError(field, method);
+                if (typeof validation === 'string') {
+                    const [method, ...args] = validation.split(':');
+
+                    if (!this[method](value, ...args)) {
+                        this.addError(field, method);
+                    }
+                } else if (typeof validation === 'object') {
+                    const { validator, model } = validation;
+                    for (const v of validator) {
+                        const [method, ...args] = v.split(':');
+
+
+                        if (await this[method](value, model, ...args) === false) {
+                            this.addError(field, method);
+
+                        }
+                    }
                 }
             }
         }
 
-        return Object.keys(this.errors).length === 0;
+        return Object.keys(this.errors).length == 0;
     }
 
     addError(campo, method) {
@@ -49,7 +63,21 @@ class Validator {
         return emailRegex.test(value);
     }
 
+    async exist(id, model) {
+        if (!id) {
+            return false;
+        }
+        const record = await model.buscar(id);
+
+        if (record) {
+            return true
+        }
+
+        return false;
+    }
+
     // Adicione mais métodos de validação conforme necessário
 }
 
 export default Validator;
+
