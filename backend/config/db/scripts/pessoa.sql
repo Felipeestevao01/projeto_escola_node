@@ -6,7 +6,8 @@ CREATE TABLE pessoa (
     cpf VARCHAR(20) NOT NULL,
     endereco VARCHAR(150) NOT NULL,
     email VARCHAR(70) NOT NULL,
-    data_aniversario DATE NOT NULL
+    data_aniversario DATE NOT NULL,
+    dt_deleted TIMESTAMP NULL
 );
 
 

@@ -15,7 +15,7 @@ class Validator {
                     const [method, ...args] = validation.split(':');
 
                     if (!this[method](value, ...args)) {
-                        this.addError(field, method);
+                        this.addError(field, method, ...args);
                     }
                 } else if (typeof validation === 'object') {
                     const { validator, model } = validation;
@@ -31,13 +31,18 @@ class Validator {
                 }
             }
         }
+        return this.errors ? true : false
 
-        return Object.keys(this.errors).length == 0;
     }
 
-    addError(campo, method) {
+
+    addError(campo, method, value = 0) {
         if (!this.errors[campo]) {
             this.errors[campo] = [];
+        }
+        if (method === 'min') {
+            this.errors[campo].push(`O Campo ${campo} deve ter no minimo ${value}`);
+            return
         }
         this.errors[campo].push(`Validação ${method} falhou no campo ${campo}`);
     }
@@ -51,7 +56,16 @@ class Validator {
     }
 
     min(value, minLength) {
-        return typeof value === 'string' && value.length >= parseInt(minLength);
+
+        if (typeof value === 'string') {
+            return value.length >= parseInt(minLength)
+        }
+
+
+        if (typeof value === 'object') {
+            return value.length >= parseInt(minLength)
+        }
+
     }
 
     max(value, maxLength) {

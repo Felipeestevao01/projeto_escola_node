@@ -4,7 +4,8 @@ CREATE TABLE nota(
     id_trabalho INT NOT NULL,
     FOREIGN KEY(id_trabalho) REFERENCES trabalho(id),
     id_aluno INT NOT NULL,
-    FOREIGN KEY(id_aluno) REFERENCES aluno(id)
+    FOREIGN KEY(id_aluno) REFERENCES aluno(id),
+    dt_deleted TIMESTAMP NULL
 );
 
 -- Função de trigger para setar os timestamps

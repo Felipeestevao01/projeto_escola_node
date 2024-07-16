@@ -4,5 +4,6 @@ CREATE TABLE questoes_trabalhos(
     id_questao INT NOT NULL,
     FOREIGN KEY(id_questao) REFERENCES questoes(id),
     id_trabalho INT NOT NULL,
-    FOREIGN KEY(id_trabalho) REFERENCES trabalho(id)
+    FOREIGN KEY(id_trabalho) REFERENCES trabalho(id),
+    dt_deleted TIMESTAMP NULL
 );
