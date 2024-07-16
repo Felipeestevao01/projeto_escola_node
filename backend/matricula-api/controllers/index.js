@@ -36,7 +36,7 @@ class Controller {
         try {
 
             const regras = [
-                { field: 'nome', validations: ['required', 'min:3'] },
+                { field: 'ativa', validations: ['required'] },
             ];
             const validator = new Validator(req.body, regras);
             if (!validator.validate()) {

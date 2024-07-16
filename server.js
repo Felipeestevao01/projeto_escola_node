@@ -7,11 +7,13 @@ import ProfessorController from './backend/professor-api/controllers/index.js';
 import CursoController from './backend/curso-api/controllers/index.js';
 import MateriaController from './backend/materia-api/controllers/index.js';
 import MatriculaController from './backend/matricula-api/controllers/index.js'
+import TrabalhoController from './backend/trabalho-api/controllers/index.js'
 const alunoController = new AlunoController()
 const professorController = new ProfessorController()
 const cursoController = new CursoController();
 const materiaControler = new MateriaController();
 const matriculaController = new MatriculaController();
+const trabalhoController = new TrabalhoController();
 
 app.use(express.json())
 app.use(express.urlencoded({
@@ -23,6 +25,7 @@ const professorGroupRouter = createGroupRouter('/professores/', professorControl
 const cursoGroupRouter = createGroupRouter('/cursos/', cursoController);
 const materiaGroupRouter = createGroupRouter('/materias/', materiaControler);
 const matriculaGroupRouter = createGroupRouter('/matriculas/', matriculaController);
+const trabalhoGroupRouter = createGroupRouter('/trabalhos/', trabalhoController)
 
 
 app.use(alunoGroupRouter.router);
@@ -30,6 +33,7 @@ app.use(professorGroupRouter.router);
 app.use(cursoGroupRouter.router);
 app.use(materiaGroupRouter.router);
 app.use(matriculaGroupRouter.router);
+app.use(trabalhoGroupRouter.router);
 
 app.listen(3000, () => {
     console.log('Escutando na porta 3000...')
