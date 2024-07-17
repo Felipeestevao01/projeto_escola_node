@@ -7,6 +7,8 @@ class TrabalhoRepository {
     }
 
     async buscarTodos() {
+        const listaTrabalhos = [];
+
         const sql = `SELECT
                         id, 
                         descricao, 
@@ -15,20 +17,19 @@ class TrabalhoRepository {
                     FROM 
                         trabalho 
                     WHERE 
-                        dt_deleted is null;`
+                        dt_deleted is null;`;
 
-        const result = await this.client.conexao.query(sql);
-        const trabalhos = [];
-        result.rows.forEach(row => {
+        const resultado = await this.client.conexao.query(sql);
+        resultado.rows.forEach(row => {
             const trabalhoAtual = new Trabalho(
                 row.id,
                 row.descricao,
                 row.data_trabalho,
                 row.id_professor
             )
-            trabalhos.push(trabalhoAtual)
+            listaTrabalhos.push(trabalhoAtual);
         });
-        return trabalhos
+        return listaTrabalhos;
     }
 
     async buscar(id) {
@@ -42,14 +43,14 @@ class TrabalhoRepository {
                     WHERE 
                         id = $1 
                     AND 
-                        dt_deleted is null;`
+                        dt_deleted is null;`;
+        const binds = [id];
 
-        const binds = [id]
-        const result = await this.client.conexao.query(sql, binds);
-        return result.rows[0];
+        const resultado = await this.client.conexao.query(sql, binds);
+        return resultado.rows[0];
     }
 
-    async salvar(descricao, data_trabalho, id_professor) {
+    async salvar(descricao, dataTrabalho, idProfessor) {
         const sql = `INSERT INTO trabalho (
                         descricao, 
                         data_trabalho, 
@@ -59,14 +60,14 @@ class TrabalhoRepository {
                         $1, 
                         $2,
                         $3 
-                    );`
+                    );`;
+        const binds = [descricao, dataTrabalho, idProfessor];
 
-        const binds = [descricao, data_trabalho, id_professor]
-        const result = await this.client.conexao.query(sql, binds);
-        return result.rows[0];
+        const resultado = await this.client.conexao.query(sql, binds);
+        return resultado.rows[0];
     }
 
-    async atualizar(id, descricao, data_trabalho, id_professor) {
+    async atualizar(id, descricao, dataTrabalho, idProfessor) {
         const sql = `UPDATE trabalho SET
                         descricao = $2,
                         data_trabalho = $3,
@@ -74,22 +75,20 @@ class TrabalhoRepository {
                     WHERE
                         id = $1
                     RETURNING id;`
+        const binds = [id, descricao, dataTrabalho, idProfessor];
 
-
-        const binds = [id, descricao, data_trabalho, id_professor]
-        const result = await this.client.conexao.query(sql, binds)
-        return result.rows[0];
+        const resultado = await this.client.conexao.query(sql, binds);
+        return resultado.rows[0];
     }
 
     async deletar(id) {
         const sql = `UPDATE trabalho SET
 				        dt_deleted = NOW()
                     WHERE id = $1;`
-
         const binds = [id];
 
-        const result = await this.client.conexao.query(sql, binds)
-        return result.rows[0];
+        const resultado = await this.client.conexao.query(sql, binds);
+        return resultado.rows[0];
     }
 }
 

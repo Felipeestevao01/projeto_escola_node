@@ -7,6 +7,7 @@ class QuestaoRepository {
     }
 
     async buscarTodos() {
+        const listaQuestoes = [];
         const sql = `SELECT 
                         id, 
                         descricao, 
@@ -16,17 +17,16 @@ class QuestaoRepository {
                     WHERE 
                         dt_deleted is null;`
 
-        const result = await this.client.conexao.query(sql);
-        const questoes = [];
-        result.rows.forEach(row => {
+        const resultado = await this.client.conexao.query(sql);
+        resultado.rows.forEach(row => {
             const questaoAtual = new Questao(
                 row.id,
                 row.descricao,
                 row.escolha
             )
-            questoes.push(questaoAtual)
+            listaQuestoes.push(questaoAtual)
         });
-        return questoes
+        return listaQuestoes
     }
 
     async buscar(id) {
@@ -39,11 +39,11 @@ class QuestaoRepository {
                     where 
                         id = $1 
                     AND 
-                        dt_deleted is null;`
+                        dt_deleted is null;`;
 
-        const binds = [id]
-        const result = await this.client.conexao.query(sql, binds);
-        return result.rows[0];
+        const binds = [id];
+        const resultado = await this.client.conexao.query(sql, binds);
+        return resultado.rows[0];
     }
 
     async salvar(descricao, escolhas) {
@@ -56,11 +56,10 @@ class QuestaoRepository {
                         $2
                     )
                     RETURNING id;`
+        const binds = [descricao, JSON.stringify(escolhas)];
 
-        const binds = [descricao, JSON.stringify(escolhas)]
-        const result = await this.client.conexao.query(sql, binds);
-
-        return result.rows[0];
+        const resultado = await this.client.conexao.query(sql, binds);
+        return resultado.rows[0];
     }
 
     async atualizar(id, descricao, escolhas) {
@@ -71,19 +70,18 @@ class QuestaoRepository {
                         id = $1
                     RETURNING id;`
 
-        const binds = [id, descricao, JSON.stringify(escolhas)]
-        const result = await this.client.conexao.query(sql, binds)
-        return result.rows[0];
+        const binds = [id, descricao, JSON.stringify(escolhas)];
+        const resultado = await this.client.conexao.query(sql, binds);
+        return resultado.rows[0];
     }
 
     async deletar(id) {
         const sql = `UPDATE questoes SET
 				        dt_deleted = NOW()
                     WHERE id = $1;`
-
         const binds = [id];
 
-        const result = await this.client.conexao.query(sql, binds)
+        const result = await this.client.conexao.query(sql, binds);
         return result.rows[0];
     }
 }

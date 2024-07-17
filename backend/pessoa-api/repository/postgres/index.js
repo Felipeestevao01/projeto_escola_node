@@ -1,4 +1,4 @@
-import Conexao from "../../../config/db/postgres.js"
+import Conexao from "../../../config/db/postgres.js";
 
 class PessoaRepository {
     constructor() {
@@ -6,17 +6,29 @@ class PessoaRepository {
     }
 
     async buscar(id) {
-        const sql = ` SELECT *
-                        FROM pessoa
-                        WHERE id = $1;`
+        const sql = `SELECT 
+                        id, 
+                        nome, 
+                        sobrenome, 
+                        telefone, 
+                        cpf, 
+                        endereco, 
+                        email, 
+                        data_aniversario 
+                    FROM 
+                        pessoa
+                    WHERE 
+                        id = $1
+                    AND
+                        dt_deleted IS NULL;`;
 
-        const binds = [id]
-        const result = await this.client.conexao.query(sql, binds);
-        return result.rows[0];
+        const binds = [id];
+        const resultado = await this.client.conexao.query(sql, binds);
+        return resultado.rows[0];
     }
 
     async salvar(res) {
-        const { nome, sobrenome, telefone, cpf, endereco, email, dataAniversario } = res
+        const { nome, sobrenome, telefone, cpf, endereco, email, dataAniversario } = res;
 
         const sql = `INSERT INTO pessoa (
                         nome, 
@@ -36,24 +48,17 @@ class PessoaRepository {
                         $6, 
                         $7
                     )
-                    RETURNING id;`
+                    RETURNING id;`;
 
-        const binds = [
-            nome,
-            sobrenome,
-            telefone,
-            cpf,
-            endereco,
-            email,
-            dataAniversario
-        ]
+        const binds = [nome, sobrenome, telefone, cpf, endereco, email, dataAniversario];
 
-        const result = await this.client.conexao.query(sql, binds);
-        return result.rows[0];
+        const resultado = await this.client.conexao.query(sql, binds);
+        return resultado.rows[0];
     }
 
     async atualizar(id, res) {
-        const { nome, sobrenome, telefone, cpf, endereco, email, data_aniversario } = res
+        const { nome, sobrenome, telefone, cpf, endereco, email, dataAniversario } = res;
+
         const sql = `UPDATE pessoa SET
                         nome = $1,
                         sobrenome = $2,
@@ -62,35 +67,25 @@ class PessoaRepository {
                         endereco = $5,
                         email = $6,
                         data_aniversario = $7
-                    WHERE id = $8;`
+                    WHERE 
+                        id = $8;`;
 
-        const binds = [
-            nome,
-            sobrenome,
-            telefone,
-            cpf,
-            endereco,
-            email,
-            data_aniversario,
-            id
-        ]
+        const binds = [nome, sobrenome, telefone, cpf, endereco, email, dataAniversario, id];
 
-        const result = await this.client.conexao.query(sql, binds)
-        return result.rows[0];
+        const resultado = await this.client.conexao.query(sql, binds);
+        return resultado.rows[0];
     }
 
     async deletar(id) {
-
         const sql = `UPDATE pessoa SET
                         dt_deleted = NOW()
-                    WHERE id = $1;`
+                    WHERE 
+                        id = $1;`;
 
-        const binds = [
-            id
-        ]
+        const binds = [id];
 
-        const result = await this.client.conexao.query(sql, binds)
-        return result.rows[0];
+        const resultado = await this.client.conexao.query(sql, binds);
+        return resultado.rows[0];
     }
 }
 

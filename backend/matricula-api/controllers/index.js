@@ -10,9 +10,9 @@ class Controller {
     getAll = async (req, res) => {
         try {
             const matriculaObj = await matriculaRepository.buscarTodos()
-            res.status(200).json(matriculaObj);
+            return res.status(200).json(matriculaObj);
         } catch (error) {
-            res.status(500).json({ msg: error.message })
+            return res.status(500).json({ msg: error.message })
         }
     }
 
@@ -22,13 +22,12 @@ class Controller {
             const matriculaObj = await matriculaRepository.buscar(id);
 
             if (!matriculaObj) {
-                res.status(422).json({ msg: "Matricula não cadastrada." })
-            } else {
-                res.status(200).json(matriculaObj);
+                return res.status(422).json({ msg: "Matricula não cadastrada." })
             }
+            return res.status(200).json(matriculaObj);
         }
         catch (error) {
-            res.status(500).json({ msg: error.message });
+            return res.status(500).json({ msg: error.message });
         }
     };
 
@@ -51,13 +50,12 @@ class Controller {
             await matriculaRepository.salvar(matriculaObj.ativa, matriculaObj.id_aluno, matriculaObj.id_curso)
 
             if (!matriculaObj) {
-                res.status(422).json({ msg: "Erro ao cadastrar a matricula." })
-            } else {
-                res.status(201).json({ msg: "Matricula cadastrada com sucesso!" });
+                return res.status(422).json({ msg: "Erro ao cadastrar a matricula." })
             }
+            return res.status(201).json({ msg: "Matricula cadastrada com sucesso!" });
         }
         catch (error) {
-            res.status(500).json({ msg: error.message })
+            return res.status(500).json({ msg: error.message })
         }
     };
 
@@ -67,17 +65,17 @@ class Controller {
             const matriculaAtual = await matriculaRepository.buscar(id)
 
             if (!matriculaAtual) {
-                res.status(422).json({ msg: "Matricula não cadastrada." })
+                return res.status(422).json({ msg: "Matricula não cadastrada." })
             }
 
             const ativa = req.body.ativa
 
             await matriculaRepository.atualizar(matriculaAtual.id, ativa);
-            res.status(200).json({ msg: "Matricula atualizada com sucesso!" });
+            return res.status(200).json({ msg: "Matricula atualizada com sucesso!" });
 
         }
         catch (error) {
-            res.status(500).json({ msg: error.message })
+            return res.status(500).json({ msg: error.message })
         }
     };
 
@@ -87,14 +85,13 @@ class Controller {
             const matriculaAtual = await matriculaRepository.buscar(id)
 
             if (!matriculaAtual) {
-                res.status(422).json({ msg: "Erro ao deletar a matricula." })
-            } else {
-                await matriculaRepository.deletar(matriculaAtual.id);
-                res.status(200).json({ msg: "Matricula deletada com sucesso!" });
+                return res.status(422).json({ msg: "Erro ao deletar a matricula." })
             }
+            await matriculaRepository.deletar(matriculaAtual.id);
+            return res.status(200).json({ msg: "Matricula deletada com sucesso!" });
         }
         catch (error) {
-            res.status(500).json({ msg: error.message })
+            return res.status(500).json({ msg: error.message })
         }
     };
 }

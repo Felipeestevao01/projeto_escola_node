@@ -8,6 +8,7 @@ class MateriaRepository {
     }
 
     async buscarTodos() {
+        const listaMaterias = [];
         const sql = ` SELECT 
                         id, 
                         descricao, 
@@ -15,20 +16,19 @@ class MateriaRepository {
                         id_professor 
                     FROM 
                         materia 
-                    WHERE dt_deleted is null;`
+                    WHERE dt_deleted is null;`;
 
-        const result = await this.client.conexao.query(sql);
-        const materias = [];
-        result.rows.forEach(row => {
-            const linhaMateria = new Materia(
+        const resultado = await this.client.conexao.query(sql);
+        resultado.rows.forEach(row => {
+            const materiaAtual = new Materia(
                 row.id,
                 row.descricao,
                 row.carga_horaria,
                 row.id_professor
             )
-            materias.push(linhaMateria)
+            listaMaterias.push(materiaAtual);
         });
-        return materias
+        return listaMaterias;
     }
 
 
@@ -41,15 +41,17 @@ class MateriaRepository {
                         id_professor 
                     FROM 
                         materia 
-                    WHERE id = $1 
-                    AND dt_deleted is null;`
+                    WHERE 
+                        id = $1 
+                    AND 
+                        dt_deleted is null;`
 
         const binds = [id];
-        const result = await this.client.conexao.query(sql, binds)
-        return result.rows[0];
+        const resultado = await this.client.conexao.query(sql, binds);
+        return resultado.rows[0];
     }
 
-    async salvar(descricao, carga_horaria, id_professor) {
+    async salvar(descricao, cargaHoraria, idProfessor) {
 
         const sql = `INSERT INTO materia (
                             descricao, 
@@ -63,32 +65,34 @@ class MateriaRepository {
                         )   
                         RETURNING id;`;
 
-        const binds = [descricao, carga_horaria, id_professor]
-        const result = await this.client.conexao.query(sql, binds)
-        return result.rows[0]
+        const binds = [descricao, cargaHoraria, idProfessor];
+        const resultado = await this.client.conexao.query(sql, binds);
+        return resultado.rows[0];
     }
 
-    async atualizar(id, descricao, carga_horaria, id_professor) {
+    async atualizar(id, descricao, cargaHoraria, idProfessor) {
         const sql = `UPDATE materia SET 
-			                descricao = $1,
-			                carga_horaria = $2,
-			                id_professor  = $3
-			        WHERE id = $4`
+			            descricao = $2,
+			            carga_horaria = $3,
+			            id_professor  = $4
+			        WHERE 
+                        id = $1`
 
-        const binds = [descricao, carga_horaria, id_professor, id]
-        const result = await this.client.conexao.query(sql, binds)
-        return result.rows[0]
+        const binds = [id, descricao, cargaHoraria, idProfessor];
+        const resultado = await this.client.conexao.query(sql, binds);
+        return resultado.rows[0];
     }
 
 
     async deletar(id) {
         const sql = `UPDATE materia SET 
 			            dt_deleted = NOW()
-			        WHERE id = $1;`
+			        WHERE 
+                        id = $1;`;
 
-        const binds = [id]
-        const result = await this.client.conexao.query(sql, binds);
-        return result.rows[0];
+        const binds = [id];
+        const resultado = await this.client.conexao.query(sql, binds);
+        return resultado.rows[0];
     }
 
 

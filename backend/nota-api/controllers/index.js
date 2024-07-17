@@ -1,41 +1,43 @@
-import NotaRepository from "../repository/postgres/index.js";
 import Validator from "../../../utilitarios/validator.js";
+import NotaRepository from "../repository/postgres/index.js";
+const notaRepository = new NotaRepository();
 import express from "express";
 const app = express();
 app.use(express.json());
-const notaRepository = new NotaRepository();
 
 class Controller {
+
     getAll = async (req, res) => {
         try {
-            const notaObj = await notaRepository.buscarTodos()
-            res.status(200).json(notaObj);
+            const listaNotasObj = await notaRepository.buscarTodos()
+            return res.status(200).json(listaNotasObj);
         } catch (error) {
-            res.status(500).json({ msg: error.message });
+            return res.status(500).json({ msg: error.message });
         }
     }
-
 
     get = async (req, res) => {
         try {
             const id = parseInt(req.params.id)
-            const notaObj = await notaRepository.buscar(id);
 
+            const notaObj = await notaRepository.buscar(id);
             if (!notaObj) {
-                res.status(422).json({ msg: "Nota não cadastrada." })
-            } else {
-                res.status(200).json(notaObj)
+                return res.status(422).json({ msg: "Nota não cadastrada." })
             }
+            return res.status(200).json(notaObj)
+
         }
         catch (error) {
-            res.status(500).json({ msg: error.message });
+            return res.status(500).json({ msg: error.message });
         }
     }
 
     create = async (req, res) => {
         try {
             const regras = [
-                { field: 'valor_nota', validations: ['required'] },
+                { field: 'valorNota', validations: ['required'] },
+                { field: 'idTrabalho', validations: ['required'] },
+                { field: 'idAluno', validations: ['required'] },
             ];
             const validator = new Validator(req.body, regras);
             if (!validator.validate()) {
@@ -43,23 +45,23 @@ class Controller {
             }
 
             const notaObj = {
-                valorNota: req.body.valor_nota,
-                idTrabalho: req.body.id_trabalho,
-                idAluno: req.body.id_aluno
+                valorNota: req.body.valorNota,
+                idTrabalho: req.body.idTrabalho,
+                idAluno: req.body.idAluno
             }
             await notaRepository.salvar(notaObj.valorNota, notaObj.idTrabalho, notaObj.idAluno)
-            res.status(201).json({ msg: "Nota cadastrada com sucesso!" })
+            return res.status(201).json({ msg: "Nota cadastrada com sucesso!" })
         }
         catch (error) {
-            res.status(500).send({ msg: error.message });
+            return res.status(500).json({ msg: error.message });
         }
     }
 
     update = async (req, res) => {
         try {
             const id = parseInt(req.params.id)
-            const notaAtual = await notaRepository.buscar(id)
 
+            const notaAtual = await notaRepository.buscar(id)
             if (!notaAtual) {
                 return res.status(500).json({ msg: "Nota não encontrada." })
             }
@@ -70,32 +72,27 @@ class Controller {
                 idAluno: req.body.id_aluno
             }
             await notaRepository.atualizar(notaAtual.id, notaAtualizada.valorNota, notaAtualizada.idTrabalho, notaAtualizada.idAluno)
-            res.status(200).json({ msg: "Nota atualizada com sucesso!" })
-
-
+            return res.status(200).json({ msg: "Nota atualizada com sucesso!" })
         }
         catch (error) {
-            res.status(500).send({ msg: error.message });
+            return res.status(500).json({ msg: error.message });
         }
     }
 
     delete = async (req, res) => {
         try {
             const id = parseInt(req.params.id)
+
             const notaAtual = await notaRepository.buscar(id)
-
             if (!notaAtual) {
-                res.status(500).send({ msg: "Nota não encontrada." })
-            } else {
-                await notaRepository.deletar(id);
-
-                res.set("Content-type", "application/json")
-                res.status(200).send({})
+                return res.status(500).json({ msg: "Nota não encontrada." })
             }
 
+            await notaRepository.deletar(notaAtual.id);
+            return res.status(200).json({})
         }
         catch (error) {
-            res.status(500).send({ msg: error.message });
+            return res.status(500).json({ msg: error.message });
         }
     }
 }

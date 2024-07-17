@@ -7,6 +7,7 @@ class NotaRepository {
     }
 
     buscarTodos = async () => {
+        const listaNotas = [];
         const sql = `SELECT 
                         id, 
                         valor_nota, 
@@ -15,20 +16,19 @@ class NotaRepository {
                     FROM 
                         nota
                     WHERE 
-                        dt_deleted is null;`
+                        dt_deleted is null;`;
 
-        const result = await this.client.conexao.query(sql)
-        const notas = []
-        result.rows.forEach(row => {
+        const resultado = await this.client.conexao.query(sql);
+        resultado.rows.forEach(row => {
             const notaAtual = new Nota(
                 row.id,
                 row.valor_nota,
                 row.id_trabalho,
                 row.id_aluno
             )
-            notas.push(notaAtual)
+            listaNotas.push(notaAtual);
         });
-        return notas;
+        return listaNotas;
     }
 
     buscar = async (id) => {
@@ -42,11 +42,11 @@ class NotaRepository {
                     WHERE 
                         id = $1 
                     AND 
-                        dt_deleted is null;`
+                        dt_deleted is null;`;
 
-        const binds = [id]
-        const result = await this.client.conexao.query(sql, binds)
-        return result.rows[0]
+        const binds = [id];
+        const resultado = await this.client.conexao.query(sql, binds);
+        return resultado.rows[0];
     }
 
     salvar = async (valorNota, idTrabalho, idAluno) => {
@@ -63,8 +63,8 @@ class NotaRepository {
                     RETURNING id;`
 
         const binds = [valorNota, idTrabalho, idAluno]
-        const result = await this.client.conexao.query(sql, binds);
-        return result.rows[0]
+        const resultado = await this.client.conexao.query(sql, binds);
+        return resultado.rows[0]
     }
 
     atualizar = async (id, valorNota, idTrabalho, idAluno) => {
@@ -77,18 +77,18 @@ class NotaRepository {
                     RETURNING id;`;
 
         const binds = [id, valorNota, idTrabalho, idAluno]
-        const result = await this.client.conexao.query(sql, binds);
-        return result.rows[0]
+        const resultado = await this.client.conexao.query(sql, binds);
+        return resultado.rows[0]
     }
 
     deletar = async (id) => {
         const sql = `UPDATE nota SET
                         dt_deleted = NOW()
-                    WHERE id = $1;`
+                    WHERE id = $1;`;
 
-        const binds = [id]
-        const result = await this.client.conexao.query(sql, binds);
-        return result.rows[0]
+        const binds = [id];
+        const resultado = await this.client.conexao.query(sql, binds);
+        return resultado.rows[0]
     }
 }
 

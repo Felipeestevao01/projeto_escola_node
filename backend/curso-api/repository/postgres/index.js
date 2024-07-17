@@ -8,6 +8,8 @@ class CursoRepository {
     }
 
     async buscarTodos() {
+        const listaCursos = [];
+
         const sql = `SELECT 
                         id, 
                         nome, 
@@ -15,19 +17,18 @@ class CursoRepository {
                     FROM 
                         curso 
                     WHERE 
-                        dt_deleted is null;`
+                        dt_deleted is null;`;
 
-        const result = await this.client.conexao.query(sql);
-        const cursos = [];
-        result.rows.forEach(row => {
-            const novoCurso = new Curso(
+        const resultado = await this.client.conexao.query(sql);
+        resultado.rows.forEach(row => {
+            const cursoAtual = new Curso(
                 row.id,
                 row.nome,
                 row.ativo
             )
-            cursos.push(novoCurso)
+            listaCursos.push(cursoAtual);
         });
-        return cursos
+        return listaCursos;
     }
 
     async buscar(id) {
@@ -44,8 +45,8 @@ class CursoRepository {
         `
 
         const binds = [id]
-        const result = await this.client.conexao.query(sql, binds);
-        return result.rows[0];
+        const resultado = await this.client.conexao.query(sql, binds);
+        return resultado.rows[0];
     }
 
     async salvar(nome, ativo) {
@@ -57,11 +58,11 @@ class CursoRepository {
                         $1,
                         $2
                     )
-                    RETURNING id;`
+                    RETURNING id;`;
 
-        const binds = [nome, ativo]
-        const result = await this.client.conexao.query(sql, binds);
-        return result.rows[0];
+        const binds = [nome, ativo];
+        const resultado = await this.client.conexao.query(sql, binds);
+        return resultado.rows[0];
     }
 
     async atualizar(id, nome, ativo) {
@@ -69,24 +70,21 @@ class CursoRepository {
                         nome = $2,
 				        ativo = $3 
 				    WHERE id = $1
-                    RETURNING id;`
+                    RETURNING id;`;
+        const binds = [id, nome, ativo];
 
-
-        const binds = [id, nome, ativo]
-
-        const result = await this.client.conexao.query(sql, binds)
-        return result.rows[0];
+        const resultado = await this.client.conexao.query(sql, binds);
+        return resultado.rows[0];
     }
 
     async deletar(id) {
         const sql = `UPDATE curso SET
 				        dt_deleted = NOW()
                     WHERE id = $1;`
-
         const binds = [id];
 
-        const result = await this.client.conexao.query(sql, binds)
-        return result.rows[0];
+        const resultado = await this.client.conexao.query(sql, binds)
+        return resultado.rows[0];
     }
 }
 
